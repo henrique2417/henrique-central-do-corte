@@ -1,0 +1,37 @@
+:root {
+  /* Cores de Fundo e Superfície (Tema Escuro Obrigatório) */
+  --bg-main: #121212;
+  --bg-secondary: #1a1a1a;
+  --surface: #2a2a2a;
+  --border: #3a3a3a;
+
+  /* Cor de Ação (Accent Premium) */
+  --accent: #d4af37;
+  --accent-hover: #e5a93b;
+  --accent-glow: rgba(212, 175, 55, 0.15);
+
+  /* Textos */
+  --text-primary: #f5f5f5;
+  --text-secondary: #b0b0b0;
+  --text-dark: #121212;
+
+  /* Cores de Status e Feedback */
+  --status-success: #4caf50;
+  --status-success-bg: rgba(76, 175, 80, 0.15);
+  --status-danger: #f44336;
+  --status-danger-bg: rgba(244, 67, 54, 0.15);
+  --status-warning: #ff9800;
+
+  /* Fontes */
+  --font-title: 'Montserrat', 'Oswald', sans-serif;
+  --font-body: 'Inter', 'Roboto', sans-serif;
+
+  /* Sombras e Bordas */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-sm: rgba(0, 0, 0, 0.2) 0 2px 4px;
+  --shadow-md: rgba(0, 0, 0, 0.4) 0 4px 12px;
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}
