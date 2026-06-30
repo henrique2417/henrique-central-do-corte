@@ -1,4 +1,6 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { ToastContainer } from './components/feedback/ToastContainer'
+import { useAuthStore } from './stores/authStore'
 
 // Importação das páginas (Esqueletos)
 import LandingPage from './pages/client/LandingPage'
@@ -7,45 +9,94 @@ import SchedulePage from './pages/admin/SchedulePage'
 import PortfolioPage from './pages/admin/PortfolioPage'
 import LoginPage from './pages/auth/LoginPage'
 
+interface ProtectedRouteProps {
+  children: React.ReactNode
+  allowedRole: 'CLIENTE' | 'ADMIN'
+}
+
+function ProtectedRoute({ children, allowedRole }: ProtectedRouteProps) {
+  const { isAuthenticated, user } = useAuthStore()
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />
+  }
+
+  if (user?.role !== allowedRole) {
+    if (user?.role === 'ADMIN') {
+      return <Navigate to="/admin/agenda" replace />
+    }
+    return <Navigate to="/" replace />
+  }
+
+  return <>{children}</>
+}
+
+interface PublicOnlyRouteProps {
+  children: React.ReactNode
+}
+
+function PublicOnlyRoute({ children }: PublicOnlyRouteProps) {
+  const { isAuthenticated, user } = useAuthStore()
+
+  if (isAuthenticated) {
+    if (user?.role === 'ADMIN') {
+      return <Navigate to="/admin/agenda" replace />
+    }
+    return <Navigate to="/" replace />
+  }
+
+  return <>{children}</>
+}
+
 function App() {
   return (
     <Router>
-      {/* Navegação Temporária para Testes */}
-      <nav style={{ 
-        padding: '1rem', 
-        background: 'var(--surface)', 
-        borderBottom: '1px solid var(--border)',
-        display: 'flex',
-        gap: '1.5rem',
-        justifyContent: 'center',
-        flexWrap: 'wrap'
-      }}>
-        <div style={{ fontWeight: 'bold', color: 'var(--accent)' }}>CLIENTE:</div>
-        <Link typeof="button" to="/">Landing Page</Link>
-        <Link to="/agendar">Agendamento</Link>
-        
-        <div style={{ fontWeight: 'bold', color: 'var(--accent)', marginLeft: '1rem' }}>ADMIN:</div>
-        <Link to="/admin/agenda">Agenda (Timeline)</Link>
-        <Link to="/admin/servicos">Portfólio</Link>
-        
-        <div style={{ marginLeft: 'auto' }}>
-          <Link to="/login" style={{ color: 'var(--accent)' }}>Entrar</Link>
-        </div>
-      </nav>
+      <ToastContainer />
 
       {/* Renderização das Rotas */}
       <main style={{ flex: 1 }}>
         <Routes>
           {/* Fluxo Cliente */}
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/agendar" element={<BookingPage />} />
+          <Route 
+            path="/" 
+            element={<LandingPage />} 
+          />
+          <Route 
+            path="/agendar" 
+            element={
+              <ProtectedRoute allowedRole="CLIENTE">
+                <BookingPage />
+              </ProtectedRoute>
+            } 
+          />
           
           {/* Fluxo Admin */}
-          <Route path="/admin/agenda" element={<SchedulePage />} />
-          <Route path="/admin/servicos" element={<PortfolioPage />} />
+          <Route 
+            path="/admin/agenda" 
+            element={
+              <ProtectedRoute allowedRole="ADMIN">
+                <SchedulePage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/servicos" 
+            element={
+              <ProtectedRoute allowedRole="ADMIN">
+                <PortfolioPage />
+              </ProtectedRoute>
+            } 
+          />
           
           {/* Auth */}
-          <Route path="/login" element={<LoginPage />} />
+          <Route 
+            path="/login" 
+            element={
+              <PublicOnlyRoute>
+                <LoginPage />
+              </PublicOnlyRoute>
+            } 
+          />
         </Routes>
       </main>
 

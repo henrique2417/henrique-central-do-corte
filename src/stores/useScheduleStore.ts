@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { BarberService } from './useBookingStore'
+import type { BarberService } from './useBookingStore'
 
 export interface Appointment {
   id: string

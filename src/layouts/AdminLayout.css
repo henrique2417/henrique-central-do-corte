@@ -1,0 +1,229 @@
+/* Layout Admin Container */
+.admin-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg-main, #121212);
+  color: var(--text-primary, #f5f5f5);
+  overflow: hidden; /* Prevent body scroll */
+}
+
+/* Sidebar: 20% width, fixed layout, background is darker */
+.admin-sidebar {
+  width: 20%;
+  min-width: 260px;
+  max-width: 320px;
+  height: 100%;
+  background-color: var(--bg-secondary, #1a1a1a);
+  border-right: 1px solid var(--border, #3a3a3a);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 2.5rem 1.5rem;
+}
+
+.sidebar-top {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* Logo "Central do Corte" */
+.sidebar-logo {
+  text-align: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border, #3a3a3a);
+}
+
+.sidebar-logo h2 {
+  font-family: var(--font-title, 'Montserrat', sans-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: linear-gradient(135deg, var(--text-primary, #f5f5f5) 30%, var(--accent, #d4af37) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Navigation List */
+.sidebar-nav {
+  width: 100%;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.nav-item {
+  width: 100%;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 1rem;
+  color: var(--text-secondary, #b0b0b0);
+  border-radius: var(--radius-md, 8px);
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-weight: 500;
+  transition: all var(--transition-fast, 0.2s ease);
+}
+
+.nav-link:hover {
+  background-color: var(--surface, #2a2a2a);
+  color: var(--text-primary, #f5f5f5);
+}
+
+/* Active Highlight: Dourado (#D4AF37) com fundo sutil */
+.nav-link.active {
+  background-color: rgba(212, 175, 55, 0.1);
+  color: var(--accent, #d4af37);
+  border-left: 3px solid var(--accent, #d4af37);
+  font-weight: 600;
+  padding-left: calc(1rem - 3px); /* Adjust padding for border */
+}
+
+.nav-link.active .nav-icon {
+  color: var(--accent, #d4af37);
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-fast, 0.2s ease);
+}
+
+/* Sidebar Footer (User info & Logout Button) */
+.sidebar-footer {
+  border-top: 1px solid var(--border, #3a3a3a);
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.admin-user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--surface, #2a2a2a);
+  border: 1px solid var(--border, #3a3a3a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--accent, #d4af37);
+  font-family: var(--font-title, sans-serif);
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary, #f5f5f5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
+.user-role {
+  font-size: 0.75rem;
+  color: var(--text-secondary, #b0b0b0);
+}
+
+/* Button Sair */
+.btn-logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.875rem;
+  background-color: transparent;
+  border: 1px solid var(--border, #3a3a3a);
+  border-radius: var(--radius-md, 8px);
+  color: var(--text-secondary, #b0b0b0);
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.2s ease);
+}
+
+.btn-logout:hover {
+  background-color: var(--status-danger-bg, rgba(244, 67, 54, 0.15));
+  border-color: var(--status-danger, #f44336);
+  color: var(--status-danger, #f44336);
+}
+
+/* Workspace: 80% width, independent scroll */
+.admin-workspace {
+  flex-grow: 1;
+  width: 80%;
+  height: 100%;
+  overflow-y: auto;
+  background-color: var(--bg-main, #121212);
+  box-sizing: border-box;
+}
+
+/* Responsive design - maintains split screen above tablets, handles gracefully on mobile */
+@media (max-width: 1024px) {
+  .admin-sidebar {
+    width: 25%;
+  }
+  .admin-workspace {
+    width: 75%;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-container {
+    flex-direction: column;
+  }
+  .admin-sidebar {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border, #3a3a3a);
+    padding: 1.5rem;
+  }
+  .sidebar-top {
+    gap: 1.5rem;
+  }
+  .sidebar-logo {
+    padding-bottom: 1rem;
+  }
+  .sidebar-nav {
+    padding: 0;
+  }
+  .nav-list {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .sidebar-footer {
+    display: none; /* Hide on mobile to save space, standard behavior */
+  }
+  .admin-workspace {
+    width: 100%;
+    height: calc(100% - 180px);
+  }
+}

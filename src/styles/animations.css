@@ -1,0 +1,37 @@
+/* Efeitos de Hover Premium */
+.hover-elevate {
+  transition: transform var(--transition-fast, 0.2s ease), box-shadow var(--transition-fast, 0.2s ease), border-color var(--transition-fast, 0.2s ease);
+}
+
+.hover-elevate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(212, 175, 55, 0.25);
+  border-color: var(--accent, #d4af37);
+}
+
+/* Efeito de Brilho de Destaque */
+.hover-glow {
+  transition: box-shadow var(--transition-fast, 0.2s ease), border-color var(--transition-fast, 0.2s ease);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 12px var(--accent-glow, rgba(212, 175, 55, 0.15));
+  border-color: var(--accent, #d4af37);
+}
+
+/* Efeito de Pulso Suave (Útil para Loaders ou Badges Ativas) */
+@keyframes pulse-gold {
+  0% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(212, 175, 55, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+  }
+}
+
+.animate-pulse-gold {
+  animation: pulse-gold 2s infinite;
+}

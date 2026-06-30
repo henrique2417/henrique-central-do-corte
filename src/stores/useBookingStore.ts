@@ -1,5 +1,17 @@
 import { create } from 'zustand'
 
+export interface Service {
+  id: string
+  titulo: string
+  descricao: string | null
+  duracao_minutos: number
+  preco: number
+  status: string
+  createdAt?: string
+  updatedAt?: string
+}
+
+// Para retrocompatibilidade com a store de agendamento do administrador (English names)
 export interface BarberService {
   id: string
   name: string
@@ -8,42 +20,54 @@ export interface BarberService {
   price: number
 }
 
+
 interface BookingState {
-  selectedService: BarberService | null
-  selectedDate: string | null // formato YYYY-MM-DD
-  selectedTime: string | null // formato HH:MM
+  // Estados
+  selectedService: Service | null
+  selectedDate: string | Date | null // Formato "YYYY-MM-DD" ou objeto Date
+  selectedTime: string | null // Formato "HH:MM", ex: "14:30"
   isSubmitting: boolean
-  
+
   // Ações
-  selectService: (service: BarberService | null) => void
-  selectDate: (date: string | null) => void
-  selectTime: (time: string | null) => void
-  resetBooking: () => void
+  setSelectedService: (service: Service | null) => void
+  setSelectedDate: (date: string | Date | null) => void
+  setSelectedTime: (time: string | null) => void
+  clearBooking: () => void
   confirmBooking: () => Promise<boolean>
+
+  // Estado derivado / Função para calcular o total
+  getTotal: () => number
 }
 
 export const useBookingStore = create<BookingState>((set, get) => ({
+  // Estados Iniciais
   selectedService: null,
   selectedDate: null,
   selectedTime: null,
   isSubmitting: false,
 
-  selectService: (service) => {
-    // Ao trocar o serviço, opcionalmente limpamos o horário selecionado
-    // caso as agendas variem por tempo de serviço.
+  // Ações
+  setSelectedService: (service) => {
+    // Ao trocar de serviço, resetamos o horário selecionado por questões de disponibilidade do novo serviço
     set({ selectedService: service, selectedTime: null })
   },
 
-  selectDate: (date) => {
+  setSelectedDate: (date) => {
+    // Ao trocar a data, resetamos o horário selecionado para obrigar o cliente a selecionar uma nova vaga
     set({ selectedDate: date, selectedTime: null })
   },
 
-  selectTime: (time) => {
+  setSelectedTime: (time) => {
     set({ selectedTime: time })
   },
 
-  resetBooking: () => {
-    set({ selectedService: null, selectedDate: null, selectedTime: null, isSubmitting: false })
+  clearBooking: () => {
+    set({
+      selectedService: null,
+      selectedDate: null,
+      selectedTime: null,
+      isSubmitting: false,
+    })
   },
 
   confirmBooking: async () => {
@@ -53,13 +77,19 @@ export const useBookingStore = create<BookingState>((set, get) => ({
     }
 
     set({ isSubmitting: true })
-    
-    // Simular requisição de agendamento na API
+
+    // Simulação temporária de envio (será integrada com a API real futuramente)
     return new Promise<boolean>((resolve) => {
       setTimeout(() => {
         set({ isSubmitting: false })
         resolve(true)
       }, 1000)
     })
+  },
+
+  // Estado derivado para obter o total do carrinho
+  getTotal: () => {
+    const service = get().selectedService
+    return service ? service.preco : 0
   }
 }))

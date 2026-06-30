@@ -1,0 +1,53 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Perfis de usuário de acordo com o PRD (Validados via aplicação já que o SQLite não suporta enums nativos):
+// - "CLIENTE": Clientes da barbearia que realizam agendamentos autônomos.
+// - "ADMIN": Administradores e Barbeiros que gerenciam a agenda e portfólio.
+model User {
+  id        String        @id @default(uuid())
+  name      String
+  email     String        @unique
+  password  String
+  role      String        @default("CLIENTE")
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  appointments Appointment[]
+
+  @@map("users")
+}
+
+model Service {
+  id              String        @id @default(uuid())
+  titulo          String
+  descricao       String?
+  duracao_minutos Int
+  preco           Float
+  status          String        @default("ATIVO") // "ATIVO" ou "INATIVO"
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  appointments Appointment[]
+
+  @@map("services")
+}
+
+model Appointment {
+  id        String   @id @default(uuid())
+  userId    String
+  serviceId String
+  data_hora DateTime
+  status    String   @default("PENDENTE") // "PENDENTE", "CONFIRMADO", "CANCELADO"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@map("appointments")
+}

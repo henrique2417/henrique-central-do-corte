@@ -1,6 +1,6 @@
 import { api } from './api'
-import { BarberService } from '../stores/useBookingStore'
-import { Appointment } from '../stores/useScheduleStore'
+import type { BarberService } from '../stores/useBookingStore'
+import type { Appointment } from '../stores/useScheduleStore'
 
 export const bookingService = {
   // Busca lista de serviços disponíveis
